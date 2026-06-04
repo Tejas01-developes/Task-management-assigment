@@ -1,0 +1,7 @@
+{
+  "name": "@workspace/Manage-tokens",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "packageManager": "yarn@4.12.0"
+}

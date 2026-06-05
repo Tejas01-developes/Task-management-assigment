@@ -35,7 +35,7 @@ alert("Registration failed")
     <div>
       <input type="text" placeholder='Name' name='name'  value={field.name}  onChange={handlefield}/>
       <input type="text" placeholder='Email' name='email' value={field.email} onChange={handlefield} />
-      <input type="text" placeholder='Password' name='password' value={field.password} onChange={handlefield} />
+      <input type="password" placeholder='Password' name='password' value={field.password} onChange={handlefield} />
       <button onClick={register}>Register</button>
     </div>
   )

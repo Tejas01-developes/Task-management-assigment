@@ -2,18 +2,26 @@ import bcrypt from 'bcrypt';
 import user_collection from "../schemas/user-schema.js";
 import { accesstoken, refreshtoken } from "../../workspace/Manage-tokens/dist/generate-token.js";
 import refresh_collection from "../schemas/refresh-schema.js";
+import task_collection from "../schemas/task-schema.js";
 export const registeruser = async (req, resp) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         resp.status(400).json({ succes: false, message: "Fields are missing" });
         return;
     }
-    const hash = await bcrypt.hash(password, 10);
-    const userid = crypto.randomUUID();
     try {
-        await user_collection.create({ id: userid, name, email, password: hash });
-        resp.status(200).json({ success: true, message: "registration success" });
-        return;
+        const res = await user_collection.findOne({ email });
+        if (!res) {
+            const hash = await bcrypt.hash(password, 10);
+            const userid = crypto.randomUUID();
+            await user_collection.create({ id: userid, name, email, password: hash });
+            resp.status(200).json({ success: true, message: "registration success" });
+            return;
+        }
+        else {
+            resp.status(400).json({ succes: false, message: "Email is already registered" });
+            return;
+        }
     }
     catch (err) {
         resp.status(400).json({ succes: false, message: "Registration failed" });
@@ -28,7 +36,7 @@ export const loginuser = async (req, resp) => {
     try {
         const res = await user_collection.findOne({ email });
         if (!res) {
-            return resp.status(400).json({ success: false, message: "result is empty" });
+            return resp.status(400).json({ success: false, message: "Email is not registered" });
         }
         const compare = await bcrypt.compare(password, res.password);
         if (!compare) {
@@ -60,11 +68,33 @@ export const loginuser = async (req, resp) => {
             secure: true,
             path: "/"
         });
-        return resp.status(200).json({ success: false, message: "Login success" });
+        return resp.status(200).json({ success: false, message: "Login success", access });
     }
     catch (err) {
         console.log(err);
         return resp.status(400).json({ success: false, message: "login failed" });
     }
+};
+export const addtask = async (req, resp) => {
+    const { title, description } = req.body;
+    if (!title || !description) {
+        resp.status(400).json({ succes: false, message: "Fields are missing" });
+        return;
+    }
+    try {
+        const res = await task_collection.findOne({ title });
+        if (!res) {
+            const userid = req.id;
+            const taskid = crypto.randomUUID();
+            await task_collection.create({ userid, id: taskid, title, description });
+            return resp.status(200).json({ success: true, message: "task succesfully added" });
+        }
+    }
+    catch (err) {
+        resp.status(400).json({ succes: false, message: "Task adding failed" });
+        return;
+    }
+};
+export const gettasks = () => {
 };
 //# sourceMappingURL=controller.js.map

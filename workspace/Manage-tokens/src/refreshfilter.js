@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { accesstoken } from "./generate-token.js";
-export const refreshfilter = (req, resp) => {
+export const refreshfilter = (req, resp, next) => {
     const token = req.cookies.refresh;
     if (!token) {
         return resp.status(400).json({ success: false, message: "refresh token is not there" });
@@ -11,7 +11,9 @@ export const refreshfilter = (req, resp) => {
         if (!id) {
             return resp.status(400).json({ success: false, message: "userid is not decoded" });
         }
+        req.id = decode.id;
         accesstoken(id);
+        next();
     }
     catch (err) {
         return resp.status(400).json({ success: false, message: "refresh filter failed" });

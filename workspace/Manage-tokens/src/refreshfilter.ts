@@ -1,10 +1,12 @@
-import {Request, Response } from "express"
+import {NextFunction, Request, Response } from "express"
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { accesstoken } from "./generate-token.js";
 
 
-
-export const refreshfilter=(req:Request,resp:Response)=>{
+interface customreq extends Request{
+    id?:string
+}
+export const refreshfilter=(req:customreq,resp:Response,next:NextFunction)=>{
     const token=req.cookies.refresh
    
 
@@ -17,8 +19,10 @@ const id=decode.id
 if(!id){
     return resp.status(400).json({success:false,message:"userid is not decoded"})
 }
-accesstoken(id)
+req.id=decode.id
 
+accesstoken(id)
+next()
 }catch(err){
     return resp.status(400).json({success:false,message:"refresh filter failed"})
 }

@@ -11,6 +11,7 @@ export const accessfilter = (req, resp, next) => {
         next();
     }
     catch (err) {
+        console.log(err);
         return resp.status(400).json({ success: false, message: "access filter failed" });
     }
 };

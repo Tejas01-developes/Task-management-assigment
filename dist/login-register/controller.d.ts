@@ -5,6 +5,6 @@ interface cutomreq extends Request {
     id?: string;
 }
 export declare const addtask: (req: cutomreq, resp: Response) => Promise<Response<any, Record<string, any>> | undefined>;
-export declare const gettasks: () => void;
+export declare const gettasks: (req: cutomreq, resp: Response) => Promise<Response<any, Record<string, any>>>;
 export {};
 //# sourceMappingURL=controller.d.ts.map

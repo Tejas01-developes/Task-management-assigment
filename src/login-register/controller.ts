@@ -80,7 +80,7 @@ try{
         secure:true,
         path:"/"
     })
-    return resp.status(200).json({success:false,message:"Login success",access})
+    return resp.status(200).json({success:true,message:"Login success",access})
 }catch(err){
     console.log(err)
     return resp.status(400).json({success:false,message:"login failed"})
@@ -100,19 +100,38 @@ if(!title || !description){
     return
 }
 try{
-const res=await task_collection.findOne({title})
-if(!res){
-    const userid:string=req.id
+    const userid:string=req.id as string
+    console.log(userid)
     const taskid:string=crypto.randomUUID()
-    await task_collection.create({userid,id:taskid,title,description})
+    await task_collection.insertOne({id:taskid,userid,title,description})
     return resp.status(200).json({success:true,message:"task succesfully added"})
-}
 }catch(err){
     resp.status(400).json({succes:false,message:"Task adding failed"})
     return
 }
 }
 
-export const gettasks=()=>{
+
+
+
+
+export const gettasks=async(req:cutomreq,resp:Response)=>{
+const userid=req.id
+if(!userid){
+    return resp.status(400).json({success:false,message:"userid is not present"})
+}
+try{
+const res=await task_collection.aggregate([
+    {$match:{userid}},
+    {$skip:1},
+    {$limit:2}
     
+])
+if(!res){
+    return resp.status(400).json({success:false,message:"No tasks of this user"})
+}
+return resp.status(200).json({success:true,result:res})
+}catch(err){
+    return resp.status(400).json({success:false,message:"Task fetch failed from the server"})
+}
 }

@@ -8,7 +8,6 @@ const taskschema = new mongoose.Schema({
     userid: {
         type: String,
         required: true,
-        unique: true
     },
     title: {
         type: String,

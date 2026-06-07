@@ -99,13 +99,16 @@ export const gettasks = async (req, resp) => {
         return resp.status(400).json({ success: false, message: "userid is not present" });
     }
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 2;
+        const skip = (page - 1) * limit;
         const res = await task_collection.aggregate([
-            { $match: { userid } },
-            { $skip: 1 },
-            { $limit: 2 }
+            { $match: { userid: userid } },
+            { $skip: skip },
+            { $limit: limit }
         ]);
-        if (!res) {
-            return resp.status(400).json({ success: false, message: "No tasks of this user" });
+        if (res.length === 0) {
+            return resp.status(400).json({ success: false, message: "No more tasks" });
         }
         return resp.status(200).json({ success: true, result: res });
     }

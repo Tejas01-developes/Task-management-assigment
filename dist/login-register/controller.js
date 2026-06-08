@@ -129,20 +129,35 @@ export const updatestatus = async (req, resp) => {
         return resp.status(400).json({ success: false, message: "status update failed" });
     }
 };
-export const getfiltertasks = async (req, resp) => {
-    const { status, userid } = req.body;
-    if (!status || !userid) {
-        return resp.status(400).json({ success: false, message: "no status" });
+// export const getfiltertasks=async(req:cutomreq,resp:Response)=>{
+//     const userid=req.id
+// const{status}=req.query as{
+//     status:string,
+// }
+// if(!status){
+//     return resp.status(400).json({success:false,message:"no status"})
+// }
+// try{
+// const get=await task_collection.aggregate([
+//     {$match:{userid}},
+//     {$match:{status}}
+// ])
+// return resp.status(200).json({success:true,tasks:get})
+// }catch(err){
+//     return resp.status(400).json({success:false,message:"filter task fetch failed"})
+// }
+// }
+export const deletetask = async (req, resp) => {
+    const { taskid } = req.query;
+    if (!taskid) {
+        return resp.status(400).json({ success: false, message: "no taskid" });
     }
     try {
-        const get = await task_collection.aggregate([
-            { $match: { userid } },
-            { $match: { status } }
-        ]);
-        return resp.status(200).json({ success: true, tasks: get });
+        await task_collection.deleteOne({ id: taskid });
+        return resp.status(200).json({ success: true, message: "task deleted" });
     }
     catch (err) {
-        return resp.status(400).json({ success: false, message: "filter task fetch failed" });
+        return resp.status(400).json({ success: false, message: "task deletation failed" });
     }
 };
 //# sourceMappingURL=controller.js.map

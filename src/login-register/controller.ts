@@ -121,6 +121,7 @@ if(!userid){
     return resp.status(400).json({success:false,message:"userid is not present"})
 }
 
+
 try{
     const page=parseInt(req.query.page as string) || 1
     const limit:number=2
@@ -155,21 +156,20 @@ return resp.status(200).json({success:true,message:"Task complet"})
 }
 }
 
-export const getfiltertasks=async(req:Request,resp:Response)=>{
-const{status,userid}=req.body as{
-    status:string,
-    userid:string
+
+
+export const deletetask=async(req:Request,resp:Response)=>{
+const{taskid}=req.query as {
+    taskid:string
 }
-if(!status || !userid){
-    return resp.status(400).json({success:false,message:"no status"})
+if(!taskid){
+    return resp.status(400).json({success:false,message:"no taskid"})
 }
 try{
-const get=await task_collection.aggregate([
-    {$match:{userid}},
-    {$match:{status}}
-])
-return resp.status(200).json({success:true,tasks:get})
+await task_collection.deleteOne({id:taskid})
+return resp.status(200).json({success:true,message:"task deleted"})
 }catch(err){
-    return resp.status(400).json({success:false,message:"filter task fetch failed"})
+    return resp.status(400).json({success:false,message:"task deletation failed"})
 }
 }
+

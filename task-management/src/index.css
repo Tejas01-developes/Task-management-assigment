@@ -439,3 +439,15 @@
   font-size: 1rem;
   font-weight: 600;
 }
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #ffffff;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  box-sizing: border-box;
+}

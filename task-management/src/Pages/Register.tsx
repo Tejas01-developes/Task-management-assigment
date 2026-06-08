@@ -31,12 +31,23 @@ alert("Registration failed")
 }
 }
 
-  return (
-    <div>
-      <input type="text" placeholder='Name' name='name'  value={field.name}  onChange={handlefield}/>
-      <input type="text" placeholder='Email' name='email' value={field.email} onChange={handlefield} />
-      <input type="password" placeholder='Password' name='password' value={field.password} onChange={handlefield} />
-      <button onClick={register}>Register</button>
+  return (    
+
+
+    
+    <div className='regparent'>
+
+     
+<div className='reghead'>
+  <h1>Register User</h1>
+</div>
+
+<div className='regbody'>
+      <input type="text" placeholder='Name' name='name'  value={field.name}  onChange={handlefield} className='regfields'/>
+      <input type="text" placeholder='Email' name='email' value={field.email} onChange={handlefield} className='regfields' />
+      <input type="password" placeholder='Password' name='password' value={field.password} onChange={handlefield} className='regfields' />
+      <button onClick={register} className='regbutton'>Register</button>
+      </div>
     </div>
   )
 }

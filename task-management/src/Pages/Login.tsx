@@ -37,11 +37,15 @@ const loginuser=async()=>{
 
 
   return (
-    <div>
-     
-      <input type="text" name='email' placeholder='Email' value={field.email} onChange={handlefield} />
-      <input type="password" name='password' placeholder='Password' value={field.password} onChange={handlefield}/>
-      <button onClick={loginuser}>Login</button>
+    <div className='loginparent'>
+     <div className='loginhead'>
+        Login user
+     </div>
+     <div className='loginbody'>
+      <input type="text" name='email' placeholder='Email' value={field.email} onChange={handlefield} className='loginfields' />
+      <input type="password" name='password' placeholder='Password' value={field.password} onChange={handlefield} className='loginfields'/>
+      <button onClick={loginuser} className='loginbutton'>Login</button>
+      </div>
     </div>
   )
 }

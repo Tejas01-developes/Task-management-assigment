@@ -116,4 +116,33 @@ export const gettasks = async (req, resp) => {
         return resp.status(400).json({ success: false, message: "Task fetch failed from the server" });
     }
 };
+export const updatestatus = async (req, resp) => {
+    const { taskid } = req.query;
+    if (!taskid) {
+        return resp.status(400).json({ success: false, message: "no task id recived" });
+    }
+    try {
+        await task_collection.updateOne({ id: taskid }, { $set: { status: "Complected" } });
+        return resp.status(200).json({ success: true, message: "Task complet" });
+    }
+    catch (err) {
+        return resp.status(400).json({ success: false, message: "status update failed" });
+    }
+};
+export const getfiltertasks = async (req, resp) => {
+    const { status, userid } = req.body;
+    if (!status || !userid) {
+        return resp.status(400).json({ success: false, message: "no status" });
+    }
+    try {
+        const get = await task_collection.aggregate([
+            { $match: { userid } },
+            { $match: { status } }
+        ]);
+        return resp.status(200).json({ success: true, tasks: get });
+    }
+    catch (err) {
+        return resp.status(400).json({ success: false, message: "filter task fetch failed" });
+    }
+};
 //# sourceMappingURL=controller.js.map

@@ -15,7 +15,7 @@ export const refreshfilter = (req, resp) => {
             return resp.status(400).json({ success: false, message: "userid is not decoded" });
         }
         const access = accesstoken(id);
-        return resp.status(200).json({ success: true, access });
+        return resp.status(200).json({ success: true, access, id });
     }
     catch (err) {
         return resp.status(400).json({ success: false, message: "refresh filter failed" });

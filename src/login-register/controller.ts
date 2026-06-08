@@ -120,18 +120,56 @@ const userid=req.id
 if(!userid){
     return resp.status(400).json({success:false,message:"userid is not present"})
 }
+
 try{
+    const page=parseInt(req.query.page as string) || 1
+    const limit:number=2
+    const skip=(page-1) * limit
 const res=await task_collection.aggregate([
-    {$match:{userid}},
-    {$skip:1},
-    {$limit:2}
+    {$match:{userid:userid}},
+    {$skip:skip},
+    {$limit:limit}
     
 ])
-if(!res){
-    return resp.status(400).json({success:false,message:"No tasks of this user"})
+if(res.length === 0){
+    return resp.status(400).json({success:false,message:"No more tasks"})
 }
 return resp.status(200).json({success:true,result:res})
 }catch(err){
     return resp.status(400).json({success:false,message:"Task fetch failed from the server"})
+}
+}
+
+export const updatestatus=async(req:Request,resp:Response)=>{
+const{taskid}=req.query as {
+    taskid:string
+}
+if(!taskid){
+    return resp.status(400).json({success:false,message:"no task id recived"})
+}
+try{
+await task_collection.updateOne({id:taskid},{$set:{status:"Complected"}})
+return resp.status(200).json({success:true,message:"Task complet"})
+}catch(err){
+    return resp.status(400).json({success:false,message:"status update failed"})
+}
+}
+
+export const getfiltertasks=async(req:Request,resp:Response)=>{
+const{status,userid}=req.body as{
+    status:string,
+    userid:string
+}
+if(!status || !userid){
+    return resp.status(400).json({success:false,message:"no status"})
+}
+try{
+const get=await task_collection.aggregate([
+    {$match:{userid}},
+    {$match:{status}}
+])
+return resp.status(200).json({success:true,tasks:get})
+}catch(err){
+    return resp.status(400).json({success:false,message:"filter task fetch failed"})
 }
 }

@@ -1,5 +1,5 @@
 import express from 'express'
-import { addtask, gettasks, loginuser, registeruser } from '../login-register/controller.js';
+import { addtask, getfiltertasks, gettasks, loginuser, registeruser, updatestatus } from '../login-register/controller.js';
 import { accessfilter } from '@workspace/Manage-tokens';
 import { refreshfilter } from '@workspace/Manage-tokens';
 
@@ -11,5 +11,6 @@ router.post("/login",loginuser)
 router.post("/posttask",accessfilter,addtask)
 router.post("/refresh",refreshfilter)
 router.get("/fetch",accessfilter,gettasks)
-
+router.patch("/status",accessfilter,updatestatus)
+router.patch("/filter",getfiltertasks)
 export default router

@@ -126,7 +126,9 @@ return alert(res.data.message)
 }
 }
 
-
+const editnavigate=()=>{
+    return navigate("/edit-task")
+}
 
 
   return (
@@ -145,7 +147,7 @@ return alert(res.data.message)
 </div>
   {/* {loading? <h1>Loading.....</h1> : token} */}
  <button onClick={taskpage} className='add-task-btn'>Add task + </button>
-
+ <button onClick={editnavigate} className='add-task-btn'>Edit Task </button>
 <div className='tasks-grid'>
     {tasks.length === 0 ?(
         <p className='no-tasks'>No task click Add task to add the task</p>
@@ -154,6 +156,7 @@ return alert(res.data.message)
 
             <div key={key} className={`task-card ${i.status?.toLowerCase() === 'complected' || i.status?.toLowerCase() === 'completed' ? 'task-done' : ''}`} >
                 <div className='task-content'>
+            {i.id} <br />
             {i.title} <br />
             {i.description} <br />
             {i.status} <br />

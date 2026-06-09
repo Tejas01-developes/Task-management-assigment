@@ -129,24 +129,6 @@ export const updatestatus = async (req, resp) => {
         return resp.status(400).json({ success: false, message: "status update failed" });
     }
 };
-// export const getfiltertasks=async(req:cutomreq,resp:Response)=>{
-//     const userid=req.id
-// const{status}=req.query as{
-//     status:string,
-// }
-// if(!status){
-//     return resp.status(400).json({success:false,message:"no status"})
-// }
-// try{
-// const get=await task_collection.aggregate([
-//     {$match:{userid}},
-//     {$match:{status}}
-// ])
-// return resp.status(200).json({success:true,tasks:get})
-// }catch(err){
-//     return resp.status(400).json({success:false,message:"filter task fetch failed"})
-// }
-// }
 export const deletetask = async (req, resp) => {
     const { taskid } = req.query;
     if (!taskid) {
@@ -158,6 +140,26 @@ export const deletetask = async (req, resp) => {
     }
     catch (err) {
         return resp.status(400).json({ success: false, message: "task deletation failed" });
+    }
+};
+export const updatetask = async (req, resp) => {
+    const { taskid, title, description } = req.body;
+    if (!taskid) {
+        return resp.status(400).json({ success: false, message: "give task id to update task" });
+    }
+    const updatedata = { status: "Pending" };
+    try {
+        if (title) {
+            updatedata.title = title;
+        }
+        if (description) {
+            updatedata.description = description;
+        }
+        await task_collection.updateOne({ id: taskid }, { $set: updatedata });
+        return resp.status(200).json({ success: true, message: "task updation failed" });
+    }
+    catch (err) {
+        return resp.status(400).json({ success: false, message: "task updation failed" });
     }
 };
 //# sourceMappingURL=controller.js.map

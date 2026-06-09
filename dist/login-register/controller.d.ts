@@ -8,5 +8,6 @@ export declare const addtask: (req: cutomreq, resp: Response) => Promise<Respons
 export declare const gettasks: (req: cutomreq, resp: Response) => Promise<Response<any, Record<string, any>>>;
 export declare const updatestatus: (req: Request, resp: Response) => Promise<Response<any, Record<string, any>>>;
 export declare const deletetask: (req: Request, resp: Response) => Promise<Response<any, Record<string, any>>>;
+export declare const updatetask: (req: Request, resp: Response) => Promise<Response<any, Record<string, any>>>;
 export {};
 //# sourceMappingURL=controller.d.ts.map

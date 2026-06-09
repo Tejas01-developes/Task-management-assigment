@@ -173,3 +173,27 @@ return resp.status(200).json({success:true,message:"task deleted"})
 }
 }
 
+export const updatetask=async(req:Request,resp:Response)=>{
+const{taskid,title,description}=req.body as{
+    taskid:string,
+    title:string,
+    description:string
+}
+if(!taskid){
+     return resp.status(400).json({success:false,message:"give task id to update task"})
+}
+const updatedata:any={status:"Pending"}
+try{
+    if(title){
+        updatedata.title=title
+    }
+    if(description){
+        updatedata.description=description
+    }
+await task_collection.updateOne({id:taskid},{$set:updatedata})
+
+ return resp.status(200).json({success:true,message:"task updation failed"})
+}catch(err){
+     return resp.status(400).json({success:false,message:"task updation failed"})
+}
+}
